@@ -11,8 +11,8 @@
 
     <artifactId>email-ext</artifactId>
     <packaging>hpi</packaging>
-    <version>2.37-SNAPSHOT</version>
-    <name>Jenkins Email Extension Plugin</name>
+    <version>2.37.1-RELEASE</version>
+    <name>Jenkins Email Extension Plugin - SFLY - Custom Build</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin</url>
     <issueManagement>
         <system>JIRA</system>
