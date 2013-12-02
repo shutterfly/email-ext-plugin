@@ -18,48 +18,56 @@ public class FirstUnstableTriggerTest extends TriggerTestBase {
     }
 
     @Test
-    public void testTrigger_success() throws IOException, InterruptedException {
+    public void testNotTriggeredBySuccess() throws IOException, InterruptedException {
         assertNotTriggered(Result.SUCCESS);
     }
 
     @Test
-    public void testTrigger_multipleSuccess() throws IOException, InterruptedException {
+    public void testNotTriggeredByFailure() throws IOException, InterruptedException {
+        assertNotTriggered(Result.FAILURE);
+    }
+
+    @Test
+    public void testNotTriggeredByMultipleSuccess() throws IOException, InterruptedException {
         assertNotTriggered(Result.SUCCESS, Result.SUCCESS, Result.SUCCESS);
     }
 
     @Test
-    public void testTrigger_firstUnstableAfterSuccess() throws IOException, InterruptedException {
+    public void testNotTriggeredByMultipleFailure() throws IOException, InterruptedException {
+        assertNotTriggered(Result.FAILURE, Result.FAILURE, Result.FAILURE);
+    }
+
+    @Test
+    public void testIsTriggeredByFirstUnstableAfterSuccess() throws IOException, InterruptedException {
         assertTriggered(Result.SUCCESS, Result.UNSTABLE);
         assertTriggered(Result.UNSTABLE, Result.UNSTABLE, Result.UNSTABLE, Result.SUCCESS, Result.UNSTABLE);
     }
 
     @Test
-    public void testTrigger_secondFailureAfterSuccess() throws IOException, InterruptedException {
+    public void testNotTriggeredBySecondUnstableAfterSuccess() throws IOException, InterruptedException {
         assertNotTriggered(Result.SUCCESS, Result.UNSTABLE, Result.UNSTABLE);
     }
 
     @Test
-    public void testTrigger_firstBuildFails() throws IOException, InterruptedException {
+    public void testIsTriggeredByFirstBuildUnstable() throws IOException, InterruptedException {
         assertTriggered(Result.UNSTABLE);
     }
 
     @Test
-    public void testTrigger_firstTwoBuildsFail() throws IOException, InterruptedException {
+    public void testNotTriggeredByMultipleBuildsUnstable() throws IOException, InterruptedException {
         assertNotTriggered(Result.UNSTABLE, Result.UNSTABLE);
+        assertNotTriggered(Result.UNSTABLE, Result.UNSTABLE, Result.UNSTABLE);
     }
 
     @Test
-    public void testTrigger_firstUnstableAfterFailure() throws IOException, InterruptedException {
+    public void testIsTriggeredByFirstUnstableAfterFailure() throws IOException, InterruptedException {
         assertTriggered(Result.FAILURE, Result.UNSTABLE);
         assertTriggered(Result.UNSTABLE, Result.UNSTABLE, Result.UNSTABLE, Result.FAILURE, Result.UNSTABLE);
     }
 
     @Test
-    public void testUpgrade() throws IOException, InterruptedException {
+    public void testIsNotTriggeredByNull() throws IOException, InterruptedException {
+        assertNotTriggered(null);
 
-        XStream2 xs = new XStream2();
-        InputStream is = FirstUnstableTriggerTest.class.getResourceAsStream("oldformatunstable.xml");
-        FirstUnstableTrigger t = (FirstUnstableTrigger) xs.fromXML(is);
-        assertEquals(t.unstableCount, 1);
     }
 }
