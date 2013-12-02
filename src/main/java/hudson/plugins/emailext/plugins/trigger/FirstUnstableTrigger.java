@@ -32,16 +32,4 @@ public class FirstUnstableTrigger extends NthUnstableTrigger {
             return TRIGGER_NAME;
         }
     }
-
-    /**
-     * Maintaining backward compatibility
-     *
-     * @return this after checking for failureCount setting
-     */
-    public Object readResolve() {
-        if (this.unstableCount == 0) {
-            this.unstableCount = 1;
-        }
-        return this;
-    }
 }

@@ -33,30 +33,45 @@ public abstract class NthUnstableTrigger extends EmailTrigger {
 
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
+        try {
+            AbstractBuild<?, ?> previousBuild = getNthPriorBuild(build, listener);
+            return shouldTransitionTrigger(previousBuild);
+        } catch (NthUnstableBuildNotFoundException e) {
+            return false;
+        }
+    }
 
-        // Work back through the unstable builds.
+    private AbstractBuild<?, ?> getNthPriorBuild(AbstractBuild<?, ?> build, TaskListener listener) throws NthUnstableBuildNotFoundException {
         for (int i = 0; i < unstableCount; i++) {
             if (build == null) {
                 // We don't have enough history to have reached the unstable count.
-                return false;
+                throw new NthUnstableBuildNotFoundException();
             }
 
             Result buildResult = build.getResult();
             if (buildResult != Result.UNSTABLE) {
-                return false;
+                throw new NthUnstableBuildNotFoundException();
             }
 
             build = ExtendedEmailPublisher.getPreviousBuild(build, listener);
         }
+        return build;
+    }
 
+    private boolean shouldTransitionTrigger(AbstractBuild<?, ?> precedingBuild) {
         // Check the the preceding build was a success or failure.
         // if there is no previous build (null), this is a first unstable
         // if there is a previous build and it's result was success or failure, this is first unstable
-        if (build == null || build.getResult() == Result.SUCCESS || build.getResult() == Result.FAILURE) {
+        if ((precedingBuild == null) || (precedingBuild.getResult() == Result.SUCCESS) || (precedingBuild.getResult() == Result.FAILURE)) {
             return true;
         }
 
         return false;
+    }
+
+    private static class NthUnstableBuildNotFoundException extends Exception {
+        NthUnstableBuildNotFoundException() {
+        }
     }
 
     public abstract static class DescriptorImpl extends EmailTriggerDescriptor {
