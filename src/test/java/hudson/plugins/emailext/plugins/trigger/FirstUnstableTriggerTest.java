@@ -65,9 +65,4 @@ public class FirstUnstableTriggerTest extends TriggerTestBase {
         assertTriggered(Result.UNSTABLE, Result.UNSTABLE, Result.UNSTABLE, Result.FAILURE, Result.UNSTABLE);
     }
 
-    @Test
-    public void testIsNotTriggeredByNull() throws IOException, InterruptedException {
-        assertNotTriggered(null);
-
-    }
 }
