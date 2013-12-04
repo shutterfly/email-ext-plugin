@@ -1,7 +1,5 @@
 package hudson.plugins.emailext;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
@@ -19,6 +17,7 @@ import hudson.plugins.emailext.plugins.EmailTrigger;
 import hudson.plugins.emailext.plugins.trigger.AbortedTrigger;
 import hudson.plugins.emailext.plugins.trigger.FailureTrigger;
 import hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger;
+import hudson.plugins.emailext.plugins.trigger.FirstUnstableTrigger;
 import hudson.plugins.emailext.plugins.trigger.FixedTrigger;
 import hudson.plugins.emailext.plugins.trigger.FixedUnhealthyTrigger;
 import hudson.plugins.emailext.plugins.trigger.NotBuiltTrigger;
@@ -46,13 +45,13 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.jvnet.hudson.test.FailureBuilder;
+import org.jvnet.hudson.test.UnstableBuilder;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockBuilder;
 import org.jvnet.mock_javamail.Mailbox;
 import org.kohsuke.stapler.Stapler;
 import static org.junit.Assert.*;
 import org.jvnet.hudson.test.Bug;
-import org.jvnet.hudson.test.JenkinsRule.WebClient;
 import org.jvnet.hudson.test.SleepBuilder;
 
 public class ExtendedEmailPublisherTest {
@@ -164,6 +163,38 @@ public class ExtendedEmailPublisherTest {
 
         assertThat("Email should NOT have been triggered for build 1, so we shouldn't see it in the logs.", build2.getLog(100),
                 not(hasItems("Email was triggered for: " + FailureTrigger.TRIGGER_NAME)));
+        assertEquals(1, Mailbox.get("ashlux@gmail.com").size());
+    }
+
+    @Test
+    public void testFirstUnstableTriggerShouldNotSendEmailOnSecondUnstable() throws Exception {
+        project.getBuildersList().add(new UnstableBuilder());
+
+        FirstUnstableTrigger trigger = new FirstUnstableTrigger(true,
+                true,
+                true,
+                false,
+                "$DEFAULT_RECIPIENTS",
+                "$DEFAULT_REPLYTO",
+                "$DEFAULT_SUBJECT",
+                "$DEFAULT_CONTENT",
+                "",
+                0,
+                "project");
+        addEmailType(trigger);
+        publisher.getConfiguredTriggers().add(trigger);
+
+        FreeStyleBuild build = project.scheduleBuild2(0).get();
+        j.assertBuildStatus(Result.UNSTABLE, build);
+
+        FreeStyleBuild build2 = project.scheduleBuild2(1).get();
+        j.assertBuildStatus(Result.UNSTABLE, build2);
+
+        assertThat("Email should have been triggered for build 0, so we should see it in the logs.", build.getLog(100),
+                hasItems("Email was triggered for: " + FirstUnstableTrigger.TRIGGER_NAME));
+
+        assertThat("Email should NOT have been triggered for build 1, so we shouldn't see it in the logs.", build2.getLog(100),
+                not(hasItems("Email was triggered for: " + FirstUnstableTrigger.TRIGGER_NAME)));
         assertEquals(1, Mailbox.get("ashlux@gmail.com").size());
     }
 
