@@ -14,10 +14,6 @@ public class FailureTrigger extends EmailTrigger {
 
     public static final String TRIGGER_NAME = "Failure";
     
-    public static FailureTrigger createDefault() {
-        return new FailureTrigger(false, true, true, true, "", "$PROJECT_DEFAULT_REPLYTO", "$PROJECT_DEFAULT_SUBJECT", "$PROJECT_DEFAULT_CONTENT", "", 0, "project");
-    }
-    
     @DataBoundConstructor
     public FailureTrigger(boolean sendToList, boolean sendToDevs, boolean sendToRequestor, boolean sendToCulprits, String recipientList,
             String replyTo, String subject, String body, String attachmentsPattern, int attachBuildLog, String contentType) {
@@ -26,11 +22,7 @@ public class FailureTrigger extends EmailTrigger {
 
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
-        Result buildResult = build.getResult();
-        if (buildResult == Result.FAILURE) {
-            return true;
-        }
-        return false;
+        return build.getResult() == Result.FAILURE;
     }
 
     @Extension

@@ -1,13 +1,10 @@
+package hudson.plugins.emailext.ExtendedEmailPublisher
+
 import hudson.plugins.emailext.plugins.EmailTrigger
-import hudson.plugins.emailext.plugins.trigger.FailureTrigger
+import hudson.plugins.emailext.plugins.trigger.UnsuccessfulTrigger
 
 // Namespaces
-l = namespace("/lib/layout")
-st = namespace("jelly:stapler")
-j = namespace("jelly:core")
-t = namespace("/lib/hudson")
 f = namespace("/lib/form")
-d = namespace("jelly:define")
 
 
 def triggers = EmailTrigger.all()
@@ -62,7 +59,7 @@ f.advanced(title: _("Advanced Settings")) {
     f.checkbox(name: "project_save_output", checked: instance?.saveOutput)
   }
 
-  def configuredTriggers = instance != null ? instance.configuredTriggers : [FailureTrigger.createDefault()]
+  def configuredTriggers = instance != null ? instance.configuredTriggers : [UnsuccessfulTrigger.createDefault()]
   
   f.entry(title: _("Triggers"), help: "/plugin/email-ext/help/projectConfig/addATrigger.html") {
     f.hetero_list(name: "project_triggers", hasHeader: true, descriptors: triggers, items: configuredTriggers, addCaption:_("Add Trigger"), deleteCaption: _("Remove Trigger"))
