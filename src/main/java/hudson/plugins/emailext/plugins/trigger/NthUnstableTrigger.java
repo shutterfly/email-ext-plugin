@@ -9,7 +9,7 @@ import hudson.plugins.emailext.plugins.EmailTriggerDescriptor;
 
 /**
  * Triggers an email after the specified number of consecutive unstable builds
- * (preceeded by a successful build).
+ * (preceded by a successful build).
  */
 public abstract class NthUnstableTrigger extends EmailTrigger {
 
@@ -62,11 +62,8 @@ public abstract class NthUnstableTrigger extends EmailTrigger {
         // Check the the preceding build was a success or failure.
         // if there is no previous build (null), this is a first unstable
         // if there is a previous build and it's result was success or failure, this is first unstable
-        if ((precedingBuild == null) || (precedingBuild.getResult() == Result.SUCCESS) || (precedingBuild.getResult() == Result.FAILURE)) {
-            return true;
-        }
+        return (precedingBuild == null) || (precedingBuild.getResult() == Result.SUCCESS) || (precedingBuild.getResult() == Result.FAILURE);
 
-        return false;
     }
 
     private static class NthUnstableBuildNotFoundException extends Exception {
