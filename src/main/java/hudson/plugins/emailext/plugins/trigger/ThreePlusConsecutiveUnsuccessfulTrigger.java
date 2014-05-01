@@ -10,6 +10,23 @@ import org.kohsuke.stapler.DataBoundConstructor;
 public class ThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
     public static final String TRIGGER_NAME = ">3 consecutive unsuccessful";
 
+    @DataBoundConstructor
+    public ThreePlusConsecutiveUnsuccessfulTrigger(
+            boolean sendToList,
+            boolean sendToDevs,
+            boolean sendToRequestor,
+            boolean sendToCulprits,
+            String recipientList,
+            String replyTo,
+            String subject,
+            String body,
+            String attachmentsPattern,
+            int attachBuildLog,
+            String contentType) {
+        super(sendToList, sendToDevs, sendToRequestor, sendToCulprits, recipientList,
+                replyTo, subject, body, attachmentsPattern, attachBuildLog, contentType);
+    }
+
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
         return lastXBuildsUnsuccessful(3, build);
@@ -26,23 +43,6 @@ public class ThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
         }
         return currentBuildUnsuccessful &&
                 lastXBuildsUnsuccessful(buildsToCheck-1,build.getPreviousBuild());
-    }
-
-    @DataBoundConstructor
-    public ThreePlusConsecutiveUnsuccessfulTrigger(
-            boolean sendToList,
-            boolean sendToDevs,
-            boolean sendToRequestor,
-            boolean sendToCulprits,
-            String recipientList,
-            String replyTo,
-            String subject,
-            String body,
-            String attachmentsPattern,
-            int attachBuildLog,
-            String contentType) {
-        super(sendToList, sendToDevs, sendToRequestor, sendToCulprits, recipientList,
-                replyTo, subject, body, attachmentsPattern, attachBuildLog, contentType);
     }
 
 
