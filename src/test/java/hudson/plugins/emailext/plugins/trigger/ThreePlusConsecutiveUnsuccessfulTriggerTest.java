@@ -8,16 +8,10 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBase {
-    private Result[] unsuccessfulResults = {
-            Result.ABORTED, Result.FAILURE, Result.UNSTABLE
-    };
 
     @Test
     public void test_successDoesNotTriggerNotification()
@@ -86,10 +80,5 @@ public class ThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBas
         return new ThreePlusConsecutiveUnsuccessfulTrigger(true, true, true, false, "", "", "", "", "",
                 0, "project");
     }
-
-    private Result randomUnsuccessfulState() {
-        return unsuccessfulResults[new Random().nextInt(unsuccessfulResults.length)];
-    }
-
 
 }

@@ -14,6 +14,11 @@ import static org.junit.Assert.*;
 public class UnsuccessfulTriggerTest extends  TriggerTestBase{
 
     @Test
+    public void test_randomUnsuccessfulDoesTrigger() throws IOException, InterruptedException {
+        assertTriggered(randomUnsuccessfulState());
+    }
+
+    @Test
     public void test_success_does_not_trigger_notification() throws IOException, InterruptedException {
         assertNotTriggered(Result.SUCCESS);
     }

@@ -8,6 +8,7 @@ import hudson.plugins.emailext.plugins.EmailTrigger;
 import hudson.util.StreamTaskListener;
 
 import java.io.IOException;
+import java.util.Random;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -18,6 +19,14 @@ import static org.mockito.Mockito.when;
  * Base class for testing
  */
 public abstract class TriggerTestBase {
+
+    private static Result[] unsuccessfulResults = {
+            Result.ABORTED, Result.FAILURE, Result.UNSTABLE
+    };
+
+    public static Result randomUnsuccessfulState() {
+        return unsuccessfulResults[new Random().nextInt(unsuccessfulResults.length)];
+    }
 
     abstract EmailTrigger newInstance();
     
@@ -64,5 +73,13 @@ public abstract class TriggerTestBase {
         }
 
         return toRet;
+    }
+
+    protected Result [] createUnsuccessfulResultArray(int n){
+        Result [] results = new Result[n];
+        for(int i=0; i<n; i++){
+            results[i] = randomUnsuccessfulState();
+        }
+        return results;
     }
 }
