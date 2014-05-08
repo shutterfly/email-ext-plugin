@@ -41,7 +41,7 @@ public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
                                                           int currentCount) {
         if(exceedsUnsuccessfulLimit(currentCount))
             return true;
-        if(getBuildStartTime(currentBuild) < minBuildTimeInMillis())
+        if(currentBuild == null || getBuildStartTime(currentBuild) < minBuildTimeInMillis())
             return exceedsUnsuccessfulLimit(currentCount);
         if(UnsuccessfulTrigger.isBuildUnsuccessful(currentBuild.getResult()))
             currentCount += 1;
