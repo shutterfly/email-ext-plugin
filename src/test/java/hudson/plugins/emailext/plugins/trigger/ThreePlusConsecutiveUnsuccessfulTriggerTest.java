@@ -74,6 +74,15 @@ public class ThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBas
         assertTrue(foundOne);
     }
 
+    @Test
+    public void test_descriptor_defaults_send_to(){
+        final ThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl descriptor =
+                new ThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl();
+        assertTrue(descriptor.getDefaultSendToDevs());
+        assertFalse(descriptor.getDefaultSendToCulprits());
+        assertTrue(descriptor.getDefaultSendToList());
+        assertTrue(descriptor.getDefaultSendToRequester());
+    }
 
     @Override
     EmailTrigger newInstance() {

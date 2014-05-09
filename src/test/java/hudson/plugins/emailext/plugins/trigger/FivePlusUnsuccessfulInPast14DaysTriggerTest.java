@@ -122,6 +122,16 @@ public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBas
         assertTrue(foundOne);
     }
 
+    @Test
+    public void test_descriptor_defaults_send_to(){
+        final FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl descriptor =
+                new FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl();
+        assertTrue(descriptor.getDefaultSendToDevs());
+        assertFalse(descriptor.getDefaultSendToCulprits());
+        assertTrue(descriptor.getDefaultSendToList());
+        assertTrue(descriptor.getDefaultSendToRequester());
+    }
+
     @Override
     FivePlusUnsuccessfulInPast14DaysTrigger newInstance() {
         return new FivePlusUnsuccessfulInPast14DaysTrigger(true, true, true, false, "", "",
