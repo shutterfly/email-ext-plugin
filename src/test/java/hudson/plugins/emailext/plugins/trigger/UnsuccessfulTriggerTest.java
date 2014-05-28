@@ -72,6 +72,6 @@ public class UnsuccessfulTriggerTest extends  TriggerTestBase{
 
     @Override
     EmailTrigger newInstance() {
-        return new UnsuccessfulTrigger(true, true, true, false, "", "", "", "", "", 0, "project");
+        return UnsuccessfulTrigger.createDefault();
     }
 }
