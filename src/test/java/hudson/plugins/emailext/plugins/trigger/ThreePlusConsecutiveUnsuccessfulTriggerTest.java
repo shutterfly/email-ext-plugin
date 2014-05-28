@@ -86,8 +86,7 @@ public class ThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBas
 
     @Override
     EmailTrigger newInstance() {
-        return new ThreePlusConsecutiveUnsuccessfulTrigger(true, true, true, false, "", "", "", "", "",
-                0, "project");
+        return ThreePlusConsecutiveUnsuccessfulTrigger.createDefault();
     }
 
 }

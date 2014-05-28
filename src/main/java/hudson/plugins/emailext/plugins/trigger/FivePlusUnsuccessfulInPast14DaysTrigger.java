@@ -14,6 +14,13 @@ public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
     public static final int NUM_DAYS_IN_WINDOW = 14;
     public static final int DELTA_FOR_AGE_THRESHOLD = NUM_DAYS_IN_WINDOW * MILLIS_PER_DAY;
 
+    @SuppressWarnings("UnusedDeclaration")
+    public static FivePlusUnsuccessfulInPast14DaysTrigger createDefault() {
+        return new FivePlusUnsuccessfulInPast14DaysTrigger(true, true, true, false, "",
+                "$PROJECT_DEFAULT_REPLYTO",
+                "$PROJECT_DEFAULT_SUBJECT", "$PROJECT_DEFAULT_CONTENT", "", 0, "project");
+    }
+
     @DataBoundConstructor
     public FivePlusUnsuccessfulInPast14DaysTrigger(
             boolean sendToList,
