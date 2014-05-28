@@ -134,9 +134,7 @@ public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBas
 
     @Override
     FivePlusUnsuccessfulInPast14DaysTrigger newInstance() {
-        return new FivePlusUnsuccessfulInPast14DaysTrigger(true, true, true, false, "", "",
-                "", "", "",
-                0, "project");
+        return FivePlusUnsuccessfulInPast14DaysTrigger.createDefault();
     }
 
     private long olderThanThreshold() {

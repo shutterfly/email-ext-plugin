@@ -1,6 +1,8 @@
 package hudson.plugins.emailext.ExtendedEmailPublisher
 
 import hudson.plugins.emailext.plugins.EmailTrigger
+import hudson.plugins.emailext.plugins.trigger.FivePlusUnsuccessfulInPast14DaysTrigger
+import hudson.plugins.emailext.plugins.trigger.ThreePlusConsecutiveUnsuccessfulTrigger
 import hudson.plugins.emailext.plugins.trigger.UnsuccessfulTrigger
 
 // Namespaces
@@ -59,7 +61,10 @@ f.advanced(title: _("Advanced Settings")) {
     f.checkbox(name: "project_save_output", checked: instance?.saveOutput)
   }
 
-  def configuredTriggers = instance != null ? instance.configuredTriggers : [UnsuccessfulTrigger.createDefault()]
+  def configuredTriggers = instance != null ? instance.configuredTriggers : [
+          ThreePlusConsecutiveUnsuccessfulTrigger.createDefault(),
+          FivePlusUnsuccessfulInPast14DaysTrigger.createDefault()
+  ]
   
   f.entry(title: _("Triggers"), help: "/plugin/email-ext/help/projectConfig/addATrigger.html") {
     f.hetero_list(name: "project_triggers", hasHeader: true, descriptors: triggers, items: configuredTriggers, addCaption:_("Add Trigger"), deleteCaption: _("Remove Trigger"))
