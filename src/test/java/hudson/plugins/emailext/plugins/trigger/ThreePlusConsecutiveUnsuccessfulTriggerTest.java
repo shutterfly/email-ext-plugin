@@ -53,35 +53,9 @@ public class ThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBas
     }
 
     @Test
-    public void test_descriptorHasExtensionAnnotation(){
-        assertNotNull(ThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl.class.getAnnotation(Extension.class));
-    }
-
-    @Test
     public void test_descriptorDisplayName(){
         assertEquals(ThreePlusConsecutiveUnsuccessfulTrigger.TRIGGER_NAME,
                 new ThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl().getDisplayName());
-    }
-
-    @Test
-    public void test_dataBoundConstructor(){
-        final Constructor<?>[] constructors = ThreePlusConsecutiveUnsuccessfulTrigger.class.getConstructors();
-        boolean foundOne = false;
-        for(Constructor<?> constructor : constructors){
-            if(constructor.getAnnotation(DataBoundConstructor.class) != null)
-                foundOne = true;
-        }
-        assertTrue(foundOne);
-    }
-
-    @Test
-    public void test_descriptor_defaults_send_to(){
-        final ThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl descriptor =
-                new ThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl();
-        assertTrue(descriptor.getDefaultSendToDevs());
-        assertFalse(descriptor.getDefaultSendToCulprits());
-        assertTrue(descriptor.getDefaultSendToList());
-        assertTrue(descriptor.getDefaultSendToRequester());
     }
 
     @Override

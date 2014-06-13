@@ -99,34 +99,16 @@ public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBas
     }
 
     @Test
-    public void test_descriptorHasExtensionAnnotation(){
-        assertNotNull(FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl.class.getAnnotation(
-                Extension.class));
-    }
-
-    @Test
     public void test_descriptorDisplayName(){
         assertEquals(FivePlusUnsuccessfulInPast14DaysTrigger.TRIGGER_NAME,
                 new FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl().getDisplayName());
     }
 
     @Test
-    public void test_dataBoundConstructor(){
-        final Constructor<?>[] constructors =
-                FivePlusUnsuccessfulInPast14DaysTrigger.class.getConstructors();
-        boolean foundOne = false;
-        for(Constructor<?> constructor : constructors){
-            if(constructor.getAnnotation(DataBoundConstructor.class) != null)
-                foundOne = true;
-        }
-        assertTrue(foundOne);
-    }
-
-    @Test
     public void test_descriptor_defaults_send_to(){
         final FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl descriptor =
                 new FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl();
-        assertTrue(descriptor.getDefaultSendToDevs());
+        assertFalse(descriptor.getDefaultSendToDevs());
         assertFalse(descriptor.getDefaultSendToCulprits());
         assertTrue(descriptor.getDefaultSendToList());
         assertTrue(descriptor.getDefaultSendToRequester());

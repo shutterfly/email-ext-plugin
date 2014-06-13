@@ -28,6 +28,11 @@ public class FirstUnstableTrigger extends NthUnstableTrigger {
     public static final class DescriptorImpl extends NthUnstableTrigger.DescriptorImpl {
 
         @Override
+        public boolean getDefaultSendToDevs() {
+            return false;
+        }
+
+        @Override
         public String getDisplayName() {
             return TRIGGER_NAME;
         }

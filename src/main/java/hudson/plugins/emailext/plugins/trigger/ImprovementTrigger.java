@@ -54,7 +54,7 @@ public class ImprovementTrigger extends EmailTrigger {
         
         @Override
         public boolean getDefaultSendToDevs() {
-            return true;
+            return false;
         }
 
         @Override

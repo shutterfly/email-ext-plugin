@@ -20,5 +20,10 @@ public class SecondFailureTrigger extends NthFailureTrigger {
         public String getDisplayName() {
             return TRIGGER_NAME;
         }
+
+        @Override
+        public boolean getDefaultSendToDevs() {
+            return false;
+        }
     }
 }

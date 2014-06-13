@@ -127,6 +127,13 @@
             <artifactId>groovy-all</artifactId>
             <version>1.8.5</version>
         </dependency>
+        <dependency>
+            <groupId>pl.pragmatists</groupId>
+            <artifactId>JUnitParams</artifactId>
+            <version>1.0.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <scm>

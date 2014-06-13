@@ -48,12 +48,12 @@ public class StatusChangedTrigger extends EmailTrigger {
 
         @Override
         public boolean getDefaultSendToDevs() {
-            return true;
+            return false;
         }
 
         @Override
         public boolean getDefaultSendToList() {
-            return false;
+            return true;
         }
     }
 }

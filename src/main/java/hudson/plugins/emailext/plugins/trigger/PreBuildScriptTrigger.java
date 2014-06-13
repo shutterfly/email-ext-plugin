@@ -27,5 +27,15 @@ public class PreBuildScriptTrigger extends AbstractScriptTrigger {
         public String getDisplayName() {
             return TRIGGER_NAME;
         }
+
+        @Override
+        public boolean getDefaultSendToList() {
+            return true;
+        }
+
+        @Override
+        public boolean getDefaultSendToDevs() {
+            return false;
+        }
     }
 }

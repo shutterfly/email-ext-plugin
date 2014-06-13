@@ -49,7 +49,7 @@ public class RegressionTrigger extends EmailTrigger {
         
         @Override
         public boolean getDefaultSendToDevs() {
-            return true;
+            return false;
         }
 
         @Override

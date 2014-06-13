@@ -53,7 +53,7 @@ public class UnsuccessfulTriggerTest extends  TriggerTestBase{
     public void test_descriptor_defaults_send_to(){
         final UnsuccessfulTrigger.DescriptorImpl descriptor =
                 new UnsuccessfulTrigger.DescriptorImpl();
-        assertTrue(descriptor.getDefaultSendToDevs());
+        assertFalse(descriptor.getDefaultSendToDevs());
         assertFalse(descriptor.getDefaultSendToCulprits());
         assertTrue(descriptor.getDefaultSendToList());
         assertTrue(descriptor.getDefaultSendToRequester());
