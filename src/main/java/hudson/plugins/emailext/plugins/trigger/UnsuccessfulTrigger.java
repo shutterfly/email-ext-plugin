@@ -14,7 +14,7 @@ public class UnsuccessfulTrigger extends EmailTrigger {
 
     @SuppressWarnings("UnusedDeclaration")
     public static UnsuccessfulTrigger createDefault() {
-        return new UnsuccessfulTrigger(true, true, true, false, "", "$PROJECT_DEFAULT_REPLYTO",
+        return new UnsuccessfulTrigger(true, false, true, false, "", "$PROJECT_DEFAULT_REPLYTO",
                 "$PROJECT_DEFAULT_SUBJECT", "$PROJECT_DEFAULT_CONTENT", "", 0, "project");
     }
 

@@ -1,6 +1,8 @@
 package hudson.plugins.emailext.plugins.trigger;
 
 import hudson.Extension;
+import hudson.plugins.emailext.EmailType;
+import hudson.plugins.emailext.plugins.EmailTrigger;
 import hudson.plugins.emailext.plugins.EmailTriggerDescriptor;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -11,6 +13,8 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,6 +24,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * This test tests functionality that should be common across all Trigger classes.
+ * It finds the Trigger classes to test by searching for class files that end with Trigger.class
+ * -Vito
+ */
 @RunWith(JUnitParamsRunner.class)
 public class TriggerBasicFunctionalityTest {
 
@@ -38,24 +47,61 @@ public class TriggerBasicFunctionalityTest {
 
     public static void addTriggerClassToData(Collection<Object> data, File classFile) throws ClassNotFoundException {
         String className = classFile.getName();
-        if(className.endsWith("Trigger")) {
-            final String fullClassName = "hudson.plugins.emailext.plugins.trigger." +
-                    className;
-            final Class aClass = Class.forName(fullClassName);
-            if (!Modifier.isAbstract(aClass.getModifiers()))
-                data.add(JUnitParamsRunner.$(aClass));
+        final String suffix = ".class";
+        if(className.endsWith(suffix)) {
+            className = className.substring(0, className.length() - suffix.length());
+            if (className.endsWith("Trigger")) {
+                final String fullClassName = "hudson.plugins.emailext.plugins.trigger." +
+                        className;
+                final Class aClass = Class.forName(fullClassName);
+                if (!Modifier.isAbstract(aClass.getModifiers()))
+                    data.add(JUnitParamsRunner.$(aClass));
+            }
         }
     }
 
     @Test
     @Parameters(method="trigger_class_params")
-    public void test_descriptor_defaults_send_to(Class triggerClass) throws ClassNotFoundException,
+    public void test_descriptor_defaults_send_to_correctly(Class triggerClass)
+            throws ClassNotFoundException,
             IllegalAccessException, InstantiationException {
         final EmailTriggerDescriptor descriptor = getDescriptorInstance(triggerClass);
         assertFalse(descriptor.getDefaultSendToDevs());
         assertFalse(descriptor.getDefaultSendToCulprits());
         assertTrue(descriptor.getDefaultSendToList());
         assertTrue(descriptor.getDefaultSendToRequester());
+    }
+
+    @Test
+    @Parameters(method="trigger_class_params")
+    public void test_default_factory_defaults_send_to_correctly(Class triggerClass) throws
+            ClassNotFoundException,
+            IllegalAccessException, InstantiationException, InvocationTargetException {
+        final EmailTrigger trigger = getInstanceFromFactoryMethod(triggerClass);
+        if(trigger == null){
+            return;
+        }
+        EmailType emailType = trigger.getEmail();
+
+        assertFalse(emailType.getSendToDevelopers());
+        assertFalse(emailType.getSendToCulprits());
+        assertTrue(emailType.getSendToRecipientList());
+        assertTrue(emailType.getSendToRequester());
+    }
+
+    private EmailTrigger getInstanceFromFactoryMethod(Class triggerClass) throws
+            ClassNotFoundException, IllegalAccessException, InstantiationException,
+            InvocationTargetException {
+        final String fullClassName = triggerClass.getCanonicalName();
+        final Class aClass = Class.forName(fullClassName);
+        Method createDefaultMethod;
+        try {
+            //noinspection NullArgumentToVariableArgMethod,unchecked
+            createDefaultMethod = aClass.getDeclaredMethod("createDefault", null);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+        return (EmailTrigger)createDefaultMethod.invoke(null);
     }
 
     public EmailTriggerDescriptor getDescriptorInstance(Class triggerClass) throws ClassNotFoundException, InstantiationException, IllegalAccessException {

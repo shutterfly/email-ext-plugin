@@ -16,7 +16,7 @@ public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
 
     @SuppressWarnings("UnusedDeclaration")
     public static FivePlusUnsuccessfulInPast14DaysTrigger createDefault() {
-        return new FivePlusUnsuccessfulInPast14DaysTrigger(true, true, true, false, "",
+        return new FivePlusUnsuccessfulInPast14DaysTrigger(true, false, true, false, "",
                 "$PROJECT_DEFAULT_REPLYTO",
                 "$PROJECT_DEFAULT_SUBJECT", "$PROJECT_DEFAULT_CONTENT", "", 0, "project");
     }

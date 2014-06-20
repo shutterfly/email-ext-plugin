@@ -30,7 +30,7 @@ public class FirstUnsuccessfulTrigger  extends EmailTrigger {
     }
 
     public static FirstUnsuccessfulTrigger createDefault() {
-        return new FirstUnsuccessfulTrigger(true, true, true, false, "",
+        return new FirstUnsuccessfulTrigger(true, false, true, false, "",
                 "$PROJECT_DEFAULT_REPLYTO",
                 "$PROJECT_DEFAULT_SUBJECT", "$PROJECT_DEFAULT_CONTENT", "", 0, "project");
     }
