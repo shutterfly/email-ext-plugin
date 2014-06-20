@@ -12,7 +12,7 @@ public class ThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
 
     @SuppressWarnings("UnusedDeclaration")
     public static ThreePlusConsecutiveUnsuccessfulTrigger createDefault() {
-        return new ThreePlusConsecutiveUnsuccessfulTrigger(true, true, true, false, "",
+        return new ThreePlusConsecutiveUnsuccessfulTrigger(true, false, true, false, "",
                 "$PROJECT_DEFAULT_REPLYTO",
                 "$PROJECT_DEFAULT_SUBJECT", "$PROJECT_DEFAULT_CONTENT", "", 0, "project");
     }
