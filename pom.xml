@@ -18,7 +18,7 @@
     </issueManagement>
 
     <properties>
-        <powermock.version>1.4.12</powermock.version>
+        <powermock.version>1.4.12-SNAPSHOT</powermock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
