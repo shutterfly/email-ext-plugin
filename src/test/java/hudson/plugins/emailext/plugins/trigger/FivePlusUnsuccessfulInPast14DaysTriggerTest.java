@@ -53,6 +53,17 @@ public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBas
     }
 
     @Test
+    public void test_fiveUnsuccessfulBuildsNotConsecutiveWith3MostRecentConsecutiveDoesNotTriggerNotification() {
+        final int numBuilds = 6;
+        Result [] results = createUnsuccessfulResultArray(numBuilds);
+        results[2] = Result.SUCCESS;
+        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
+        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
+        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
+        assertFalse(trigger.trigger(build, getTaskListener()));
+    }
+
+    @Test
     public void test_fiveUnsuccessfulBuildsNotConsecutiveDoesTriggerNotification() {
         final int numBuilds = 6;
         Result [] results = createUnsuccessfulResultArray(numBuilds);

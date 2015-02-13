@@ -43,7 +43,7 @@ public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
         return UnsuccessfulTrigger.isBuildUnsuccessful(build.getResult()) &&
                 hasFiveUnsuccessfulBuildsInPast14Days(build, 0) &&
                 !hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0) &&
-                !ThreePlusConsecutiveUnsuccessfulTrigger.lastXBuildsUnsuccessful(3, build.getPreviousBuild());
+                !ThreePlusConsecutiveUnsuccessfulTrigger.lastXBuildsUnsuccessful(3, build);
     }
 
     public static boolean hasFiveUnsuccessfulBuildsInPast14Days(AbstractBuild<?, ?> currentBuild,
