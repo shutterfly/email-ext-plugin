@@ -11,7 +11,10 @@ import java.lang.reflect.Constructor;
 
 import static org.junit.Assert.*;
 
-public class ThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBase {
+/**
+ * Created by jagte on 2/12/15.
+ */
+public class FixedThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBase {
 
     @Test
     public void test_successDoesNotTriggerNotification()
@@ -26,41 +29,42 @@ public class ThreePlusConsecutiveUnsuccessfulTriggerTest extends  TriggerTestBas
     }
 
     @Test
-    public void test_threeUnsuccessfulDoTrigger()
-            throws IOException, InterruptedException {
-        assertTriggered(randomUnsuccessfulState(), randomUnsuccessfulState(),
-                randomUnsuccessfulState());
-    }
-
-    @Test
-    public void test_oneSuccessAndTwoUnSuccessfulDoNotTrigger()
-            throws IOException, InterruptedException {
-        assertNotTriggered(Result.SUCCESS, randomUnsuccessfulState(), randomUnsuccessfulState());
-    }
-
-    @Test
-    public void test_ThreeUnsuccessfulThenOneSuccessDoesNotTrigger()
+    public void test_twoUnsuccessfulThenOneSuccessfulDoNOTTrigger()
             throws IOException, InterruptedException {
         assertNotTriggered(randomUnsuccessfulState(), randomUnsuccessfulState(),
+                Result.SUCCESS);
+    }
+
+    @Test
+    public void test_oneSuccessAndTwoUnSuccessfulThenOneSuccessfulDoNotTrigger()
+            throws IOException, InterruptedException {
+        assertNotTriggered(Result.SUCCESS, randomUnsuccessfulState(),
+                randomUnsuccessfulState(),Result.SUCCESS);
+    }
+
+    @Test
+    public void test_ThreeUnsuccessfulThenOneSuccessDoesTrigger()
+            throws IOException, InterruptedException {
+        assertTriggered(randomUnsuccessfulState(), randomUnsuccessfulState(),
                 randomUnsuccessfulState(), Result.SUCCESS);
     }
 
     @Test
-    public void test_forthUnsuccessfulDoesNotTrigger()
+    public void test_ThreeUnsuccessfulThenTwoSuccessDoesNotTrigger()
             throws IOException, InterruptedException {
         assertNotTriggered(randomUnsuccessfulState(), randomUnsuccessfulState(),
-                randomUnsuccessfulState(), randomUnsuccessfulState());
+                randomUnsuccessfulState(), Result.SUCCESS, Result.SUCCESS);
     }
 
     @Test
     public void test_descriptorDisplayName(){
-        assertEquals(ThreePlusConsecutiveUnsuccessfulTrigger.TRIGGER_NAME,
-                new ThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl().getDisplayName());
+        assertEquals(FixedThreePlusConsecutiveUnsuccessfulTrigger.TRIGGER_NAME,
+                new FixedThreePlusConsecutiveUnsuccessfulTrigger.DescriptorImpl().getDisplayName());
     }
 
     @Override
     EmailTrigger newInstance() {
-        return ThreePlusConsecutiveUnsuccessfulTrigger.createDefault();
+        return FixedThreePlusConsecutiveUnsuccessfulTrigger.createDefault();
     }
 
 }

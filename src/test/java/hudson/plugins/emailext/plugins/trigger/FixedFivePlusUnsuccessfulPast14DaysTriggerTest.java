@@ -17,9 +17,12 @@ import static org.junit.Assert.*;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
+/**
+ * Created by jagte on 2/12/15.
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AbstractBuild.class)
-public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBase{
+public class FixedFivePlusUnsuccessfulPast14DaysTriggerTest extends  TriggerTestBase {
 
     @Test
     public void test_successDoesNotTriggerNotification() throws IOException, InterruptedException {
@@ -33,94 +36,79 @@ public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBas
     }
 
     @Test
-    public void test_OneSuccessfulThenThreeUnsuccessfulAllRecentDoesNotTriggerNotification() {
+    public void test_ThreeUnsuccessfulThenOneSuccessfulAllRecentDoesNotTriggerNotification() {
         final int numBuilds = 4;
         final Result[] results = createUnsuccessfulResultArray(numBuilds);
-        results[0] = Result.SUCCESS;
-        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
-        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
-        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
-        assertFalse(trigger.trigger(build, getTaskListener()));
-    }
-
-    @Test
-    public void test_fiveConsecutiveUnsuccessfulBuildsDoesNotTriggerNotification() {
-        final int numBuilds = 5;
-        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(createUnsuccessfulResultArray(numBuilds));
-        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
-        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
-        assertFalse(trigger.trigger(build, getTaskListener()));
-    }
-
-    @Test
-    public void test_fiveUnsuccessfulBuildsNotConsecutiveDoesTriggerNotification() {
-        final int numBuilds = 6;
-        Result [] results = createUnsuccessfulResultArray(numBuilds);
         results[3] = Result.SUCCESS;
         AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
         setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
-        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
+        FixedFivePlusUnsuccessfulPast14DaysTrigger trigger = newInstance();
+        assertFalse(trigger.trigger(build, getTaskListener()));
+    }
+
+    @Test
+    public void test_fiveConsecutiveUnsuccessfulBuildsThenOneSuccessfulDoesNotTriggerNotification() {
+        final int numBuilds = 6;
+        final Result[] results = createUnsuccessfulResultArray(numBuilds);
+        results[5] = Result.SUCCESS;
+        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
+        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
+        FixedFivePlusUnsuccessfulPast14DaysTrigger trigger = newInstance();
+        assertFalse(trigger.trigger(build, getTaskListener()));
+    }
+
+    @Test
+    public void test_fiveUnsuccessfulBuildsNotConsecutiveThenOneSuccessfulDoesTriggerNotification() {
+        final int numBuilds = 7;
+        Result [] results = createUnsuccessfulResultArray(numBuilds);
+        results[3] = Result.SUCCESS;
+        results[6] = Result.SUCCESS;
+        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
+        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
+        FixedFivePlusUnsuccessfulPast14DaysTrigger trigger = newInstance();
         assertTrue(trigger.trigger(build, getTaskListener()));
     }
 
     @Test
-    public void test_sixRecentUnsuccessfulBuildsDoesNotTriggerNotification() {
-        final int numBuilds = 7;
+    public void test_fiveNotConsecutiveUnsuccessfulBuildsThenTwoSuccessfulDoesNotTriggerNotification() {
+        final int numBuilds = 8;
         Result [] results = createUnsuccessfulResultArray(numBuilds);
         results[4] = Result.SUCCESS;
+        results[6] = Result.SUCCESS;
+        results[7] = Result.SUCCESS;
         AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
         setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
-        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
+        FixedFivePlusUnsuccessfulPast14DaysTrigger trigger = newInstance();
         assertFalse(trigger.trigger(build, getTaskListener()));
     }
 
     @Test
     public void
-    test_fiveRecentUnsuccessfulBuildsButOneIsBefore14DayMark_DoesNotTriggerNotification() {
-        final int numBuilds = 5;
-        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(createUnsuccessfulResultArray(numBuilds));
+    test_fiveNotConsecutiveUnsuccessfulBuildsButOneIsBefore14DayMarkThenOneSuccessful_DoesNotTriggerNotification() {
+        final int numBuilds = 8;
+        Result [] results = createUnsuccessfulResultArray(numBuilds);
+        results[4] = Result.SUCCESS;
+        results[6] = Result.SUCCESS;
+        results[7] = Result.SUCCESS;
+        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
         long [] buildTimes = createJustHappenedBuildTimeArray(numBuilds);
         buildTimes[0] = olderThanThreshold();
         setGetStartTimeInMillis(build, buildTimes);
-        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
+        FixedFivePlusUnsuccessfulPast14DaysTrigger trigger = newInstance();
         assertFalse(trigger.trigger(build, getTaskListener()));
     }
 
-    @Test
-    public void
-    test_fiveRecentUnsuccessfulBuildsWithAFewSuccessfulBuilds_DoesTriggerNotification() {
-        final int numBuilds = 7;
-        Result [] results = createUnsuccessfulResultArray(numBuilds);
-        results[2] = Result.SUCCESS;
-        results[4] = Result.SUCCESS;
-        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
-        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
-        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
-        assertTrue(trigger.trigger(build, getTaskListener()));
-    }
-
-    @Test
-    public void
-    test_fiveRecentUnsuccessfulBuildsButMostRecentBuildPassed_DoesNotTriggerNotification() {
-        final int numBuilds = 6;
-        Result [] results = createUnsuccessfulResultArray(numBuilds);
-        results[numBuilds-1] = Result.SUCCESS;
-        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
-        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
-        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
-        assertFalse(trigger.trigger(build, getTaskListener()));
-    }
 
     @Test
     public void test_descriptorDisplayName(){
-        assertEquals(FivePlusUnsuccessfulInPast14DaysTrigger.TRIGGER_NAME,
-                new FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl().getDisplayName());
+        assertEquals(FixedFivePlusUnsuccessfulPast14DaysTrigger.TRIGGER_NAME,
+                new FixedFivePlusUnsuccessfulPast14DaysTrigger.DescriptorImpl().getDisplayName());
     }
 
     @Test
     public void test_descriptor_defaults_send_to(){
-        final FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl descriptor =
-                new FivePlusUnsuccessfulInPast14DaysTrigger.DescriptorImpl();
+        final FixedFivePlusUnsuccessfulPast14DaysTrigger.DescriptorImpl descriptor =
+                new FixedFivePlusUnsuccessfulPast14DaysTrigger.DescriptorImpl();
         assertFalse(descriptor.getDefaultSendToDevs());
         assertFalse(descriptor.getDefaultSendToCulprits());
         assertTrue(descriptor.getDefaultSendToList());
@@ -128,8 +116,8 @@ public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBas
     }
 
     @Override
-    FivePlusUnsuccessfulInPast14DaysTrigger newInstance() {
-        return FivePlusUnsuccessfulInPast14DaysTrigger.createDefault();
+    FixedFivePlusUnsuccessfulPast14DaysTrigger newInstance() {
+        return FixedFivePlusUnsuccessfulPast14DaysTrigger.createDefault();
     }
 
     private long olderThanThreshold() {

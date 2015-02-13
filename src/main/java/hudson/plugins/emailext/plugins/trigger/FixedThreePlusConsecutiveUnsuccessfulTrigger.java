@@ -6,19 +6,23 @@ import hudson.model.TaskListener;
 import hudson.plugins.emailext.plugins.EmailTrigger;
 import hudson.plugins.emailext.plugins.EmailTriggerDescriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
+import hudson.model.Result;
 
-public class ThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
-    public static final String TRIGGER_NAME = ">3 consecutive unsuccessful";
+/**
+ * Created by jagte on 2/11/15.
+ */
+public class FixedThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
+    public static final String TRIGGER_NAME = "Fixed >3 consecutive unsuccessful";
 
     @SuppressWarnings("UnusedDeclaration")
-    public static ThreePlusConsecutiveUnsuccessfulTrigger createDefault() {
-        return new ThreePlusConsecutiveUnsuccessfulTrigger(true, false, true, false, "",
+    public static FixedThreePlusConsecutiveUnsuccessfulTrigger createDefault() {
+        return new FixedThreePlusConsecutiveUnsuccessfulTrigger(true, false, true, false, "",
                 "$PROJECT_DEFAULT_REPLYTO",
                 "$PROJECT_DEFAULT_SUBJECT", "$PROJECT_DEFAULT_CONTENT", "", 0, "project");
     }
 
     @DataBoundConstructor
-    public ThreePlusConsecutiveUnsuccessfulTrigger(
+    public FixedThreePlusConsecutiveUnsuccessfulTrigger(
             boolean sendToList,
             boolean sendToDevs,
             boolean sendToRequestor,
@@ -36,20 +40,8 @@ public class ThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
 
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
-        return lastXBuildsUnsuccessful(3, build) && !lastXBuildsUnsuccessful(3, build.getPreviousBuild());
-    }
-
-    public static boolean lastXBuildsUnsuccessful(int buildsToCheck, AbstractBuild<?, ?> build) {
-        if(build == null){
-            return false;
-        }
-
-        final boolean currentBuildUnsuccessful = UnsuccessfulTrigger.isBuildUnsuccessful(build.getResult());
-        if(buildsToCheck == 1){
-            return currentBuildUnsuccessful;
-        }
-        return currentBuildUnsuccessful &&
-                lastXBuildsUnsuccessful(buildsToCheck-1,build.getPreviousBuild());
+        return (build.getResult()== Result.SUCCESS) &&
+                ThreePlusConsecutiveUnsuccessfulTrigger.lastXBuildsUnsuccessful(3, build.getPreviousBuild());
     }
 
 

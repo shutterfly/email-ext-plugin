@@ -2,8 +2,9 @@ package hudson.plugins.emailext.ExtendedEmailPublisher
 
 import hudson.plugins.emailext.plugins.EmailTrigger
 import hudson.plugins.emailext.plugins.trigger.FivePlusUnsuccessfulInPast14DaysTrigger
+import hudson.plugins.emailext.plugins.trigger.FixedFivePlusUnsuccessfulPast14DaysTrigger
+import hudson.plugins.emailext.plugins.trigger.FixedThreePlusConsecutiveUnsuccessfulTrigger
 import hudson.plugins.emailext.plugins.trigger.ThreePlusConsecutiveUnsuccessfulTrigger
-import hudson.plugins.emailext.plugins.trigger.UnsuccessfulTrigger
 
 // Namespaces
 f = namespace("/lib/form")
@@ -63,7 +64,9 @@ f.advanced(title: _("Advanced Settings")) {
 
   def configuredTriggers = instance != null ? instance.configuredTriggers : [
           ThreePlusConsecutiveUnsuccessfulTrigger.createDefault(),
-          FivePlusUnsuccessfulInPast14DaysTrigger.createDefault()
+          FivePlusUnsuccessfulInPast14DaysTrigger.createDefault(),
+          FixedThreePlusConsecutiveUnsuccessfulTrigger.createDefault(),
+          FixedFivePlusUnsuccessfulPast14DaysTrigger.createDefault()
   ]
   
   f.entry(title: _("Triggers"), help: "/plugin/email-ext/help/projectConfig/addATrigger.html") {

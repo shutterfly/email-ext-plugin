@@ -41,10 +41,12 @@ public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
         return UnsuccessfulTrigger.isBuildUnsuccessful(build.getResult()) &&
-                hasFiveUnsuccessfulBuildsInPast14Days(build, 0);
+                hasFiveUnsuccessfulBuildsInPast14Days(build, 0) &&
+                !hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0) &&
+                !ThreePlusConsecutiveUnsuccessfulTrigger.lastXBuildsUnsuccessful(3, build.getPreviousBuild());
     }
 
-    private boolean hasFiveUnsuccessfulBuildsInPast14Days(AbstractBuild<?, ?> currentBuild,
+    public static boolean hasFiveUnsuccessfulBuildsInPast14Days(AbstractBuild<?, ?> currentBuild,
                                                           int currentCount) {
         if(exceedsUnsuccessfulLimit(currentCount))
             return true;
@@ -56,11 +58,11 @@ public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
         return hasFiveUnsuccessfulBuildsInPast14Days(currentBuild.getPreviousBuild(), currentCount);
     }
 
-    private long getBuildStartTime(AbstractBuild<?, ?> build) {
+    private static long getBuildStartTime(AbstractBuild<?, ?> build) {
         return build.getStartTimeInMillis();
     }
 
-    private boolean exceedsUnsuccessfulLimit(int currentCount) {
+    private static boolean exceedsUnsuccessfulLimit(int currentCount) {
         return currentCount >= NUM_BUILDS_UNSUCCESSFUL_LIMIT;
     }
 
