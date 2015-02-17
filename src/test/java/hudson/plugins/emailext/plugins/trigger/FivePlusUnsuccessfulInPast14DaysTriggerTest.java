@@ -134,8 +134,9 @@ public class FivePlusUnsuccessfulInPast14DaysTriggerTest extends  TriggerTestBas
     }
 
     private long olderThanThreshold() {
+        FivePlusUnsuccessfulInPast14DaysTrigger trigger = newInstance();
         return System.currentTimeMillis() -
-                FivePlusUnsuccessfulInPast14DaysTrigger.DELTA_FOR_AGE_THRESHOLD - 1000;
+                trigger.rules.DELTA_FOR_AGE_THRESHOLD - 1000;
     }
 
     private long justHappened() {

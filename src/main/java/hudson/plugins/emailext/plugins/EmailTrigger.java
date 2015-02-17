@@ -19,6 +19,8 @@ import org.kohsuke.stapler.StaplerRequest;
 
 public abstract class EmailTrigger implements Describable<EmailTrigger>, ExtensionPoint {
 
+    public EmailTriggerRules rules;
+
     private EmailType email;
 
     public static DescriptorExtensionList<EmailTrigger, EmailTriggerDescriptor> all() {
@@ -40,6 +42,8 @@ public abstract class EmailTrigger implements Describable<EmailTrigger>, Extensi
         email.setCompressBuildLog(attachBuildLog > 1);
         email.setContentType(contentType);
         email.setSendToCulprits(sendToCulprits);
+
+        rules = new EmailTriggerRules();
     }
     
     protected EmailTrigger(JSONObject formData) {

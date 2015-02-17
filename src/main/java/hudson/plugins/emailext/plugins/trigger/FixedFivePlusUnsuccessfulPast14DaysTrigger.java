@@ -49,8 +49,8 @@ public class FixedFivePlusUnsuccessfulPast14DaysTrigger extends EmailTrigger {
             return false;
         }
         return (build.getResult() == Result.SUCCESS) &&
-                UnsuccessfulTrigger.isBuildUnsuccessful(build.getPreviousBuild().getResult()) &&
-                FivePlusUnsuccessfulInPast14DaysTrigger.hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0);
+                rules.isBuildUnsuccessful(build.getPreviousBuild().getResult()) &&
+                rules.hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0);
     }
 
 

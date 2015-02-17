@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
  */
 public abstract class TriggerTestBase {
 
+
     private static Result[] unsuccessfulResults = {
             Result.ABORTED, Result.FAILURE, Result.UNSTABLE
     };

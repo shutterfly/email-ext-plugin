@@ -37,12 +37,10 @@ public class UnsuccessfulTrigger extends EmailTrigger {
 
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
-        return isBuildUnsuccessful(build.getResult());
+        return rules.isBuildUnsuccessful(build.getResult());
     }
 
-    public static boolean isBuildUnsuccessful(Result result) {
-        return result.isWorseThan(Result.SUCCESS);
-    }
+
 
     @Extension
     public static final class DescriptorImpl extends EmailTriggerDescriptor {

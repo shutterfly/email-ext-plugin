@@ -36,20 +36,8 @@ public class ThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
 
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
-        return lastXBuildsUnsuccessful(3, build) && !lastXBuildsUnsuccessful(3, build.getPreviousBuild());
-    }
-
-    public static boolean lastXBuildsUnsuccessful(int buildsToCheck, AbstractBuild<?, ?> build) {
-        if(build == null){
-            return false;
-        }
-
-        final boolean currentBuildUnsuccessful = UnsuccessfulTrigger.isBuildUnsuccessful(build.getResult());
-        if(buildsToCheck == 1){
-            return currentBuildUnsuccessful;
-        }
-        return currentBuildUnsuccessful &&
-                lastXBuildsUnsuccessful(buildsToCheck-1,build.getPreviousBuild());
+        return rules.lastXBuildsUnsuccessful(3, build) &&
+                !rules.lastXBuildsUnsuccessful(3, build.getPreviousBuild());
     }
 
 
