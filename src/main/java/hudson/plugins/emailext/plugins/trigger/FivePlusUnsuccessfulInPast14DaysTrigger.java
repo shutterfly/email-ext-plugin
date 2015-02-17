@@ -7,6 +7,8 @@ import hudson.plugins.emailext.plugins.EmailTrigger;
 import hudson.plugins.emailext.plugins.EmailTriggerDescriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.util.List;
+
 public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
     public static final String TRIGGER_NAME = ">5 unsuccessful in past 14 days";
     public static final int MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -38,12 +40,16 @@ public class FivePlusUnsuccessfulInPast14DaysTrigger extends EmailTrigger {
                 replyTo, subject, body, attachmentsPattern, attachBuildLog, contentType);
     }
 
+    /* This should send email, as long as:
+    -The current build is unsuccessful
+    -There were 5 unsuccessful builds in the last 14 days
+    -This trigger has not already fired based on the previous build (i.e. the 6th, 7th, etc. failure)
+*/
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
         return UnsuccessfulTrigger.isBuildUnsuccessful(build.getResult()) &&
                 hasFiveUnsuccessfulBuildsInPast14Days(build, 0) &&
-                !hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0) &&
-                !ThreePlusConsecutiveUnsuccessfulTrigger.lastXBuildsUnsuccessful(3, build);
+                !hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0);
     }
 
     public static boolean hasFiveUnsuccessfulBuildsInPast14Days(AbstractBuild<?, ?> currentBuild,

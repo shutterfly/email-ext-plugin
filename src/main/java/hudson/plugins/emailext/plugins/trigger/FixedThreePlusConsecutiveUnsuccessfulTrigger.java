@@ -38,6 +38,10 @@ public class FixedThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
                 replyTo, subject, body, attachmentsPattern, attachBuildLog, contentType);
     }
 
+    /* This should send email, as long as:
+        -The current build is successful
+        -The three previous builds were unsuccessful
+    */
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
         return (build.getResult()== Result.SUCCESS) &&

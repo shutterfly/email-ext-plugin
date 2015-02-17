@@ -38,6 +38,11 @@ public class FixedFivePlusUnsuccessfulPast14DaysTrigger extends EmailTrigger {
                 replyTo, subject, body, attachmentsPattern, attachBuildLog, contentType);
     }
 
+    /* This should send email, as long as:
+        -The current build is successful
+        -The previous build is not successful (If it was successful then this trigger has already sent email)
+        -There were 5 unsuccessful builds in the last 14 days
+    */
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
          if(build.getPreviousBuild() == null){
@@ -45,9 +50,7 @@ public class FixedFivePlusUnsuccessfulPast14DaysTrigger extends EmailTrigger {
         }
         return (build.getResult() == Result.SUCCESS) &&
                 UnsuccessfulTrigger.isBuildUnsuccessful(build.getPreviousBuild().getResult()) &&
-                FivePlusUnsuccessfulInPast14DaysTrigger.hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0) &&
-                !ThreePlusConsecutiveUnsuccessfulTrigger.lastXBuildsUnsuccessful(3, build.getPreviousBuild());
-
+                FivePlusUnsuccessfulInPast14DaysTrigger.hasFiveUnsuccessfulBuildsInPast14Days(build.getPreviousBuild(), 0);
     }
 
 

@@ -46,16 +46,6 @@ public class FixedFivePlusUnsuccessfulPast14DaysTriggerTest extends  TriggerTest
         assertFalse(trigger.trigger(build, getTaskListener()));
     }
 
-    @Test
-    public void test_fiveConsecutiveUnsuccessfulBuildsThenOneSuccessfulDoesNotTriggerNotification() {
-        final int numBuilds = 6;
-        final Result[] results = createUnsuccessfulResultArray(numBuilds);
-        results[5] = Result.SUCCESS;
-        AbstractBuild<?, ?> build =  mockBuildWithPowerMock(results);
-        setGetStartTimeInMillis(build, createJustHappenedBuildTimeArray(numBuilds));
-        FixedFivePlusUnsuccessfulPast14DaysTrigger trigger = newInstance();
-        assertFalse(trigger.trigger(build, getTaskListener()));
-    }
 
     @Test
     public void test_fiveUnsuccessfulBuildsNotConsecutiveThenOneSuccessfulDoesTriggerNotification() {
