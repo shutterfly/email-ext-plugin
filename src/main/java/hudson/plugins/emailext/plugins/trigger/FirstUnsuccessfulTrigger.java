@@ -22,10 +22,10 @@ public class FirstUnsuccessfulTrigger  extends EmailTrigger {
 
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
-        if(!rules.isBuildUnsuccessful(build.getResult()))
+        if(!UnsuccessfulTrigger.isBuildUnsuccessful(build.getResult()))
             return false;
         AbstractBuild<?, ?> prevBuild = build.getPreviousBuild();
-        return prevBuild == null || !rules.isBuildUnsuccessful(prevBuild.getResult());
+        return prevBuild == null || !UnsuccessfulTrigger.isBuildUnsuccessful(prevBuild.getResult());
 
     }
 

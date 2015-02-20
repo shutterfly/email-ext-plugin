@@ -45,8 +45,9 @@ public class FixedThreePlusConsecutiveUnsuccessfulTrigger extends EmailTrigger {
     @Override
     public boolean trigger(AbstractBuild<?, ?> build, TaskListener listener) {
         return (build.getResult()== Result.SUCCESS) &&
-                rules.lastXBuildsUnsuccessful(3, build.getPreviousBuild());
+                ThreePlusConsecutiveUnsuccessfulTrigger.lastXBuildsUnsuccessful(3, build.getPreviousBuild());
     }
+
 
     @Extension
     public static class DescriptorImpl extends EmailTriggerDescriptor {
