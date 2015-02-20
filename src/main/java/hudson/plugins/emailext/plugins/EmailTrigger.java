@@ -40,7 +40,6 @@ public abstract class EmailTrigger implements Describable<EmailTrigger>, Extensi
         email.setCompressBuildLog(attachBuildLog > 1);
         email.setContentType(contentType);
         email.setSendToCulprits(sendToCulprits);
-
     }
     
     protected EmailTrigger(JSONObject formData) {
